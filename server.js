@@ -19,7 +19,7 @@ const router = express.Router();
 const enableCORS = function (req, res, next) {
   console.log("enableCORS");
   if (!process.env.DISABLE_XORIGIN) {
-    console.log("enableCORS");
+    console.log("Enable XORIGIN");
     const allowedOrigins = ["https://www.freecodecamp.org"];
     const origin = req.headers.origin;
     if (!process.env.XORIGIN_RESTRICT || allowedOrigins.indexOf(origin) > -1) {

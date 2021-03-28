@@ -17,7 +17,9 @@ const bodyParser = require("body-parser");
 const router = express.Router();
 
 const enableCORS = function (req, res, next) {
+  console.log("enableCORS");
   if (!process.env.DISABLE_XORIGIN) {
+    console.log("enableCORS");
     const allowedOrigins = ["https://www.freecodecamp.org"];
     const origin = req.headers.origin;
     if (!process.env.XORIGIN_RESTRICT || allowedOrigins.indexOf(origin) > -1) {
@@ -30,6 +32,7 @@ const enableCORS = function (req, res, next) {
       });
     }
   }
+
   next();
 };
 
@@ -83,19 +86,24 @@ router.post("/mongoose-model", function (req, res, next) {
 
 const createPerson = require("./myApp.js").createAndSavePerson;
 router.get("/create-and-save-person", function (req, res, next) {
+
   // in case of incorrect function use wait timeout then respond
   let t = setTimeout(() => {
     next({ message: "timeout" });
   }, TIMEOUT);
+
   createPerson(function (err, data) {
+
     clearTimeout(t);
     if (err) {
       return next(err);
     }
+
     if (!data) {
       console.log("Missing `done()` argument");
       return next({ message: "Missing callback argument" });
     }
+
     Person.findById(data._id, function (err, pers) {
       if (err) {
         return next(err);
@@ -103,6 +111,7 @@ router.get("/create-and-save-person", function (req, res, next) {
       res.json(pers);
       pers.remove();
     });
+
   });
 });
 
